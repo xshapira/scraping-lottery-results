@@ -3,9 +3,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 from django.http import HttpRequest, HttpResponse
-
-# from django.views import View
-from django.views.generic import TemplateView
+from django.views import View
 
 
 def scrape_lotto_results(url: str) -> list[dict[str, str]]:
@@ -32,25 +30,31 @@ def scrape_lotto_results(url: str) -> list[dict[str, str]]:
     return lotto_results
 
 
-class ReviewLotteryResults(TemplateView):
-    template_name = "index.html"
+class ReviewLotteryResults(View):
+    """
+    Checks if the number is between 2500 and 3540, returning an
+    error message if it isn't. If the number is valid, it scrapes data
+    from the pais website using BeautifulSoup4.
 
-    def get(self, request: HttpRequest, number: int) -> HttpResponse:
-        """
-               Checks if the number is between 2500 and 3540, returning an
-               error message if it isn't. If the number is valid, it scrapes data
-               from the pais website using BeautifulSoup4.
+    We then checks whether any of the numbers in `lotto_results` are
+    in our list of numbers (numbers). If there's a match,
+    we return True for "is_winner". Otherwise we return False.
 
-               We then checks whether any of the numbers in `lotto_results` are
-               in our list of numbers (numbers). If there's a match,
-               we return True for "is_winner". Otherwise we return False.
+    :param request: HttpRequest: Get the data from the user
+    :return: A json object with a single key, is_winner
+    """
 
-               :param request: HttpRequest: Get the request data from the client
-               :param number: int: Specify the number of the lottery
-               :return: A HttpResponse
-        object, which is a wrapper around the
-               response that django sends back to the user
-        """
+    def post(self, request: HttpRequest) -> HttpResponse:
+        number = request.POST.get("number")
+
+        if not number:
+            return HttpResponse("Number not provided.", status=400)
+        try:
+            number = int(number)
+        except ValueError:
+            return HttpResponse(
+                "Invalid number. Number must be an integer.", status=400
+            )
 
         if not 2500 <= number <= 3540:
             return HttpResponse(

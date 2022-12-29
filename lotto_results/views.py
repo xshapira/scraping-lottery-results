@@ -3,7 +3,9 @@ import json
 import requests
 from bs4 import BeautifulSoup
 from django.http import HttpRequest, HttpResponse
-from django.views import View
+
+# from django.views import View
+from django.views.generic import TemplateView
 
 
 def scrape_lotto_results(url: str) -> list[dict[str, str]]:
@@ -30,7 +32,9 @@ def scrape_lotto_results(url: str) -> list[dict[str, str]]:
     return lotto_results
 
 
-class ReviewLotteryResults(View):
+class ReviewLotteryResults(TemplateView):
+    template_name = "index.html"
+
     def get(self, request: HttpRequest, number: int) -> HttpResponse:
         """
                Checks if the number is between 2500 and 3540, returning an

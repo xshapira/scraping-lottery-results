@@ -2,7 +2,7 @@ import json
 
 import requests
 from bs4 import BeautifulSoup
-from django.http import HttpRequest, HTTPResponse
+from django.http import HttpRequest, HttpResponse
 from django.views import View
 
 
@@ -31,24 +31,25 @@ def scrape_lotto_results(url: str) -> list[dict[str, str]]:
 
 
 class ReviewLotteryResults(View):
-    def get(self, request: HttpRequest, number: int) -> HTTPResponse:
+    def get(self, request: HttpRequest, number: int) -> HttpResponse:
         """
-        Checks if the number is between 2500 and 3540, returning an
-        error message if it isn't. If the number is valid, it scrapes data
-        from the pais website using BeautifulSoup4.
+               Checks if the number is between 2500 and 3540, returning an
+               error message if it isn't. If the number is valid, it scrapes data
+               from the pais website using BeautifulSoup4.
 
-        We then checks whether any of the numbers in `lotto_results` are
-        in our list of numbers (numbers). If there's a match,
-        we return True for "is_winner". Otherwise we return False.
+               We then checks whether any of the numbers in `lotto_results` are
+               in our list of numbers (numbers). If there's a match,
+               we return True for "is_winner". Otherwise we return False.
 
-        :param request: HttpRequest: Get the request data from the client
-        :param number: int: Specify the number of the lottery
-        :return: A httpresponse object, which is a wrapper around the
-        response that django sends back to the user
+               :param request: HttpRequest: Get the request data from the client
+               :param number: int: Specify the number of the lottery
+               :return: A HttpResponse
+        object, which is a wrapper around the
+               response that django sends back to the user
         """
 
         if not 2500 <= number <= 3540:
-            return HTTPResponse(
+            return HttpResponse(
                 "Invalid number. Number must be between 2500 and 3540.", status=400
             )
 
@@ -60,7 +61,7 @@ class ReviewLotteryResults(View):
         is_winner = any(number in lotto_results["numbers"] for _ in lotto_results)
 
         result = {"is_winner": is_winner}
-        return HTTPResponse(
+        return HttpResponse(
             json.dumps(result),
             content_type="application/json",
         )

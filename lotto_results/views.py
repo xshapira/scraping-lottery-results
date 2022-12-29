@@ -3,6 +3,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
 from django.views import View
 
 
@@ -43,6 +44,9 @@ class ReviewLotteryResults(View):
     :param request: HttpRequest: Get the data from the user
     :return: A json object with a single key, is_winner
     """
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(request, "index.html")
 
     def post(self, request: HttpRequest) -> HttpResponse:
         number = request.POST.get("number")

@@ -4,11 +4,11 @@ from bs4 import BeautifulSoup
 
 def scrape_lotto_results(url: str) -> list[dict[str, str]]:
     """
-    Scrape the results of the lotto archive website and returns
-    a list of dictionaries with the date and numbers for each drawing.
+    Scrape the results of a given lotto page and returns a list
+    of dictionaries with the date and numbers for each drawing.
 
-    :param url: str: Pass in the url of the website that we want to scrape
-    :return: A list of dictionaries
+    :param url: str: Specify the url of the website that we want to scrape
+    :return: A list of dictionaries, where each dictionary has two keys:
     """
 
     response = requests.get(url)

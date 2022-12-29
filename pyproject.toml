@@ -3,16 +3,57 @@ name = "app"
 version = "0.1.0"
 description = ""
 authors = ["Admin <admin@example.com>"]
+license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-Django = "^4.0.6"
-psycopg2-binary = "^2.9.3"
-psycopg2 = "^2.9.3"
+python = "^3.11"
+
+# 3rd party
+django = "^4.1.1"
 python-decouple = "^3.6"
+requests = "^2.28.1"
 
 [tool.poetry.group.dev.dependencies]
+black = "^22.6.0"
+ruff = "^0.0.185"
+isort = "^5.10.1"
+django-stubs = "^1.12.0"
+mypy = "^0.971"
 
+[tool.mypy]
+follow_imports = "silent"
+ignore_missing_imports = true
+implicit_reexport = false
+strict_optional = true
+show_error_codes = true
+
+# Ensure full coverage
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+check_untyped_defs = true
+strict_equality = true
+
+# Restrict dynamic typing
+disallow_any_generics = true
+disallow_subclassing_any = true
+warn_return_any = true
+
+# Know exactly what you're doing
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unused_configs = true
+warn_unreachable = true
+
+# Explicit is better than implicit
+no_implicit_optional = true
+
+[tool.mypy.plugins.django-stubs]
+django_settings_module = "config.settings"
+
+[tool.django-stubs]
+django_settings_module = "config.settings"
 
 [tool.isort]
 multi_line_output = 3
@@ -20,6 +61,24 @@ include_trailing_comma = true
 force_grid_wrap = 0
 line_length = 88
 profile = "black"
+
+[tool.ruff]
+exclude = [
+    '.git',
+    '__pycache__',
+    '__init__.py',
+    '.mypy_cache',
+    '.pytest_cache',
+    'venv',
+    'migrations',
+]
+ignore = ['E402']
+line-length = 88
+select = [
+    'E',
+    'F',
+    'W',
+]
 
 [build-system]
 requires = ["poetry-core"]

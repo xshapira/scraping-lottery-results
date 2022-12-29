@@ -22,7 +22,7 @@ class TestHomeView(TestCase):
         settings.DEBUG = self.debug
 
     def test_home_url_resolves_to_offer_view(self):
-        self.assertEquals(resolve(self.url).func.view_class, HomeView)
+        self.assertEqual(resolve(self.url).func.view_class, HomeView)
 
     def test_home_view_name(self):
         # Ensure name of the view is "index"

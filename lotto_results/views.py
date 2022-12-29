@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from django.views import View
 
 
 def scrape_lotto_results(url: str) -> list[dict[str, str]]:
@@ -24,3 +25,7 @@ def scrape_lotto_results(url: str) -> list[dict[str, str]]:
             lotto_results.append({"date": date, "numbers": numbers})
 
     return lotto_results
+
+
+class ReviewLotteryResults(View):
+    pass

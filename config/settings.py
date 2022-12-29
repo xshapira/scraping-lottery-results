@@ -32,7 +32,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = []
 
 PROJECT_APPS = [
-    "lotto_results.apps.LottoResultConfig",
+    "lotto_results.apps.LottoResultsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS

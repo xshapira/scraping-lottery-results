@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["Admin <admin@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.0.6"
+psycopg2-binary = "^2.9.3"
+psycopg2 = "^2.9.3"
+python-decouple = "^3.6"
+
+[tool.poetry.group.dev.dependencies]
+
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+line_length = 88
+profile = "black"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

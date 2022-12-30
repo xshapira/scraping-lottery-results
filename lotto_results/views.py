@@ -41,7 +41,7 @@ def scrape_lotto_results(url: str) -> list[dict[str, Any]]:
         result = {
             "title": title.text.strip().replace("\n", " "),
             "date": date.text.strip().replace("\n", " "),
-            "numbers": sorted_list_of_numbers,
+            "numbers": " ".join(sorted_list_of_numbers),
             "strong_number": strong.text.strip().replace("\n", " "),
         }
         lotto_results.append(result)

@@ -18,8 +18,10 @@
         <ul>
           {% for result in lotto_results %}
             <li>
+              <p>{{ result.title }}</p>
               <p>{{ result.date }}</p>
               <p>{{ result.numbers }}</p>
+              <p>{{ result.strong_number }}</p>
             </li>
           {% endfor %}
         </ul>

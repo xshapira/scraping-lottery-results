@@ -1,15 +1,15 @@
-from typing import Any
+import json
 
 import requests
 from bs4 import BeautifulSoup
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 
-def scrape_lotto_results(url: str) -> list[dict[str, Any]]:
+def scrape_lotto_results(url: str) -> JsonResponse:
     """
     Scrape the results of a given lotto page and returns a list
     of dictionaries with the date and numbers for each drawing.
@@ -28,9 +28,9 @@ def scrape_lotto_results(url: str) -> list[dict[str, Any]]:
     strong_number = soup.find_all(class_="loto_info_num strong")
 
     lotto_results = []
-    for title, date, number, strong in zip(main_title, dates, numbers, strong_number):
+    for title, date, strong_num in zip(main_title, dates, strong_number):
 
-        # extract the six numbers from the `numbers` variable
+        # Extract the six numbers from the `numbers` variable
         list_of_numbers = [number.text.strip() for number in numbers]
         sorted_list_of_numbers = sorted(
             list_of_numbers,
@@ -42,10 +42,12 @@ def scrape_lotto_results(url: str) -> list[dict[str, Any]]:
             "title": title.text.strip().replace("\n", " "),
             "date": date.text.strip().replace("\n", " "),
             "numbers": " ".join(sorted_list_of_numbers),
-            "strong_number": strong.text.strip().replace("\n", " "),
+            "strong_number": strong_num.text.strip().replace("\n", " "),
         }
         lotto_results.append(result)
-    return lotto_results
+
+    # Return the scraped data as a JSON response
+    return JsonResponse(lotto_results, safe=False)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -85,9 +87,12 @@ class ReviewLotteryResults(View):
 
         url = f"https://pais.co.il/lotto/currentlotto.aspx?lotteryId={number}"
 
-        # scrape the data from the URL
+        # Scrape the data from the URL
         lotto_results = scrape_lotto_results(url)
 
-        # return the scraped data as a JSON response
-        # return JsonResponse(lotto_results, safe=False)
-        return render(request, "index.html", {"lotto_results": lotto_results})
+        # Parse the JSON data contained in the lotto_results object
+        # and store it in a dictionary
+        data = json.loads(lotto_results.content)
+
+        context = {"lotto_results": data}
+        return render(request, "index.html", context)

@@ -11,11 +11,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 def scrape_lotto_results(url: str) -> JsonResponse:
     """
-    Scrape the results of a given lotto page and returns a list
-    of dictionaries with the date and numbers for each drawing.
+    Accept a URL as an argument and return a JSON response containing
+    the scraped data. We use BeautifulSoup to parse out all of the HTML
+    content from that page.
 
-    :param url: str: Specify the url of the website that we want to scrape
-    :return: A list of dictionaries, where each dictionary has two keys:
+    It then extracts the result of the lotto numbers, sorts them in
+    descending order, and joins them into one string with spaces between
+    each number.
+
+    :param url: str: Pass the url of the website to be scraped
+    :return: A json response
     """
 
     response = requests.get(url)
@@ -59,10 +64,9 @@ class ReviewLotteryResults(View):
 
     We then checks whether any of the numbers in `lotto_results` are
     in our list of numbers (numbers). If there's a match,
-    we return True for "is_winner". Otherwise we return False.
+    we return the winning numbers.
 
     :param request: HttpRequest: Get the data from the user
-    :return: A json object with a single key, is_winner
     """
 
     def get(self, request: HttpRequest) -> HttpResponse:

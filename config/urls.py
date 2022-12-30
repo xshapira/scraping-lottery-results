@@ -22,6 +22,6 @@ urlpatterns = [
     path(
         "review-lottery-results/",
         ReviewLotteryResults.as_view(),
-        name="review_lottery_results",
+        name="review-lottery-results",
     ),
 ]

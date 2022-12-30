@@ -2,7 +2,7 @@ from typing import Any
 
 import requests
 from bs4 import BeautifulSoup
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -22,14 +22,27 @@ def scrape_lotto_results(url: str) -> list[dict[str, Any]]:
     soup = BeautifulSoup(response.text, "html.parser")
 
     # Extract the data from the HTML content
-    dates = soup.find_all(class_="archive_open_info w-clearfix")
-    numbers = soup.find_all(class_="current_lottery_numgroup w-clearfix")
+    main_title = soup.find_all(class_="archive_open_title lotto")
+    dates = soup.find_all(class_="archive_open_dates w-clearfix")
+    numbers = soup.find_all("li", class_="loto_info_num")
+    strong_number = soup.find_all(class_="loto_info_num strong")
 
     lotto_results = []
-    for date, number in zip(dates, numbers):
+    for title, date, number, strong in zip(main_title, dates, numbers, strong_number):
+
+        # extract the six numbers from the `numbers` variable
+        list_of_numbers = [number.text.strip() for number in numbers]
+        sorted_list_of_numbers = sorted(
+            list_of_numbers,
+            key=lambda x: int(x),
+            reverse=True,
+        )
+
         result = {
+            "title": title.text.strip().replace("\n", " "),
             "date": date.text.strip().replace("\n", " "),
-            "numbers": number.text.strip().replace("\n", " "),
+            "numbers": sorted_list_of_numbers,
+            "strong_number": strong.text.strip().replace("\n", " "),
         }
         lotto_results.append(result)
     return lotto_results
@@ -76,4 +89,5 @@ class ReviewLotteryResults(View):
         lotto_results = scrape_lotto_results(url)
 
         # return the scraped data as a JSON response
-        return JsonResponse(lotto_results, safe=False)
+        # return JsonResponse(lotto_results, safe=False)
+        return render(request, "index.html", {"lotto_results": lotto_results})

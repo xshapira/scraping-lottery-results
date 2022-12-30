@@ -1,13 +1,15 @@
-import json
+from typing import Any
 
 import requests
 from bs4 import BeautifulSoup
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 
-def scrape_lotto_results(url: str) -> list[dict[str, str]]:
+def scrape_lotto_results(url: str) -> list[dict[str, Any]]:
     """
     Scrape the results of a given lotto page and returns a list
     of dictionaries with the date and numbers for each drawing.
@@ -20,17 +22,20 @@ def scrape_lotto_results(url: str) -> list[dict[str, str]]:
     soup = BeautifulSoup(response.text, "html.parser")
 
     # Extract the data from the HTML content
-    lotto_results = []
-    for tr in soup.find_all("tr"):
-        tds = tr.find_all("td")
-        if len(tds) == 6:
-            date = tds[0].text
-            numbers = [tds[i].text for i in range(1, 6)]
-            lotto_results.append({"date": date, "numbers": numbers})
+    dates = soup.find_all(class_="archive_open_info w-clearfix")
+    numbers = soup.find_all(class_="current_lottery_numgroup w-clearfix")
 
+    lotto_results = []
+    for date, number in zip(dates, numbers):
+        result = {
+            "date": date.text.strip().replace("\n", " "),
+            "numbers": number.text.strip().replace("\n", " "),
+        }
+        lotto_results.append(result)
     return lotto_results
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 class ReviewLotteryResults(View):
     """
     Checks if the number is between 2500 and 3540, returning an
@@ -70,10 +75,5 @@ class ReviewLotteryResults(View):
         # scrape the data from the URL
         lotto_results = scrape_lotto_results(url)
 
-        is_winner = any(number in lotto_results["numbers"] for _ in lotto_results)
-
-        result = {"is_winner": is_winner}
-        return HttpResponse(
-            json.dumps(result),
-            content_type="application/json",
-        )
+        # return the scraped data as a JSON response
+        return JsonResponse(lotto_results, safe=False)

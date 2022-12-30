@@ -20,7 +20,7 @@
             <li>
               <p>{{ result.title }}</p>
               <p>{{ result.date }}</p>
-              <p>{{ result.numbers }}</p>
+              {% for num in result.numbers %}<li>{{ num }}</li>{% endfor %}
               <p>{{ result.strong_number }}</p>
             </li>
           {% endfor %}

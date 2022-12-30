@@ -35,18 +35,20 @@ def scrape_lotto_results(url: str) -> JsonResponse:
     lotto_results = []
     for title, date, strong_num in zip(main_title, dates, strong_number):
 
-        # Extract the six numbers from the `numbers` variable
-        list_of_numbers = [number.text.strip() for number in numbers]
+        # Extract the six lottery numbers as individual `li` elements
+        # from the `numbers` variable
+        list_of_numbers = [number.extract() for number in numbers]
         sorted_list_of_numbers = sorted(
             list_of_numbers,
-            key=lambda x: int(x),
+            # Extract the text from the `Tag` object
+            key=lambda x: int(x.text),
             reverse=True,
         )
 
         result = {
             "title": title.text.strip().replace("\n", " "),
             "date": date.text.strip().replace("\n", " "),
-            "numbers": " ".join(sorted_list_of_numbers),
+            "numbers": [number.text for number in sorted_list_of_numbers],
             "strong_number": strong_num.text.strip().replace("\n", " "),
         }
         lotto_results.append(result)

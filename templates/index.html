@@ -22,9 +22,10 @@
     </form>
     <div id="results">
       {% if lotto_results %}
+        <hr class="my-8 h-px border-0 bg-gray-400" />
         <ul>
           {% for result in lotto_results %}
-            <li>
+            <li class="mt-6">
               <p class="mb-2">{{ result.title }}</p>
               <p class="mb-2">{{ result.date }}</p>
               <div class="grid grid-cols-7 mt-6">

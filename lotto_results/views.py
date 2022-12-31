@@ -100,5 +100,5 @@ class ReviewLotteryResults(View):
         # and store it in a dictionary
         data = json.loads(lotto_results.content)
 
-        context = {"lotto_results": data}
+        context = {"lotto_results": data, "number": number}
         return render(request, "index.html", context)

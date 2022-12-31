@@ -30,37 +30,38 @@
           </button>
         </div>
       </div>
-      <div>
-        {% if lotto_results %}
-          <hr class="my-8 h-px border-0 bg-gray-400" />
-          <ul>
-            {% for result in lotto_results %}
-              <li class="mt-6">
-                <p class="mb-2 font-bold text-2xl">{{ result.title }}</p>
-                <p class="mb-2">{{ result.date }}</p>
-                <div class="flex mt-6 ml-6">
-                  <div class="inline-flex shadow-xl border border-gray-100 rounded-lg">
-                    {% for num in result.numbers %}
-                      <div class="container bg-white px-6 py-4 rounded-lg">
-                        <div class="w-12 h-12 rounded-full bg-red-500 inline-flex items-center justify-center text-2xl text-white">
-                          {{ num }}
-                        </div>
-                      </div>
-                    {% endfor %}
-                  </div>
-                  <div class="flex bg-white px-6 py-4 ml-4 shadow-lg rounded-lg border border-gray-100">
-                    <div class="w-12 h-12 rounded-full bg-blue-300 inline-flex items-center justify-center text-2xl text-black">
-                      {{ result.strong_number }}
+      {% if lotto_results %}
+        <hr class="my-8 h-px border-0 bg-gray-400" />
+        <ul class="mt-6">
+          {% for result in lotto_results %}
+            <p class="mb-2 font-bold text-2xl">{{ result.title }}</p>
+            <p class="mb-2">{{ result.date }}</p>
+            <div class="flex mt-6 ml-6">
+              <div class="inline-flex shadow-xl border border-gray-100 rounded-lg">
+                {% for num in result.numbers %}
+                  <div class="container bg-white px-6 py-4 rounded-lg">
+                    <div class="w-12 h-12 rounded-full bg-red-500 inline-flex items-center justify-center text-2xl text-white">
+                      {{ num }}
                     </div>
                   </div>
+                {% endfor %}
+              </div>
+              <div class="flex bg-white px-6 py-4 ml-4 shadow-lg rounded-lg border border-gray-100">
+                <div class="w-12 h-12 rounded-full bg-blue-300 inline-flex items-center justify-center text-2xl text-black">
+                  {{ result.strong_number }}
                 </div>
-                <div dir="rtl"
-                     class="flex items-center justify-center text-center text-base mt-2">תוצאות הגרלה לוטו</div>
-              </li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-      </div>
+              </div>
+            </div>
+            <div dir="rtl"
+                 class="flex items-center justify-center text-center text-base text-base mt-2 text-slate-500">
+              תוצאות הגרלה לוטו
+            </div>
+            <div class="relative items-center justify-left justify-center">
+              <div class="text-center text-base -mt-6 pr-2 float-right text-slate-500">המספר החזק</div>
+            </div>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </section>
   </form>
 {% endblock content %}

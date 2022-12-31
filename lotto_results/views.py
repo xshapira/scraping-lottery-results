@@ -82,16 +82,18 @@ class ReviewLotteryResults(View):
 
         if not number:
             errors.append("Number not provided.")
-        try:
-            number = int(number)
-        except ValueError:
-            errors.append("Invalid number. Number must be an integer.")
 
         else:
-            if not 2500 <= number <= 3540:
-                errors.append(
-                    "Invalid number. Number must be between 2500 and 3540.",
-                )
+            try:
+                number = int(number)
+            except ValueError:
+                errors.append("Invalid number. Number must be an integer.")
+
+            else:
+                if not 2500 <= number <= 3540:
+                    errors.append(
+                        "Invalid number. Number must be between 2500 and 3540.",
+                    )
 
         # If there are any errors, pass the error messages to the template context
         if errors:

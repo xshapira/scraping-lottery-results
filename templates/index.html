@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-  <form id="results"
-        method="post"
-        hx-post="/review-lottery-results/"
-        hx-target="#results">
+  <form id="results" method="post" hx-post="." hx-target="#results">
     {% csrf_token %}
     <section class="max-w-3xl mx-auto mb-4 text-center px-4 pt-24 pb-12 md:pt-32 md:pb-20 sm:px-6">
       <h1 class="text-4xl font-bold mb-8">חיפוש תוצאות לוטו</h1>

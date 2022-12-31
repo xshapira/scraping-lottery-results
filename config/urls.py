@@ -20,7 +20,7 @@ from lotto_results.views import ReviewLotteryResults
 urlpatterns = [
     # path("admin/", admin.site.urls),
     path(
-        "review-lottery-results/",
+        "",
         ReviewLotteryResults.as_view(),
         name="review-lottery-results",
     ),

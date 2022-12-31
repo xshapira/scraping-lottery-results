@@ -4,9 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
 
 
 def scrape_lotto_results(url: str) -> JsonResponse:
@@ -57,7 +55,6 @@ def scrape_lotto_results(url: str) -> JsonResponse:
     return JsonResponse(lotto_results, safe=False)
 
 
-@method_decorator(csrf_exempt, name="dispatch")
 class ReviewLotteryResults(View):
     """
     Checks if the number is between 2500 and 3540, returning an

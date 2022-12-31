@@ -77,19 +77,26 @@ class ReviewLotteryResults(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         number = request.POST.get("number")
 
+        # Set up a list to store error messages
+        errors = []
+
         if not number:
-            return HttpResponse("Number not provided.", status=400)
+            errors.append("Number not provided.")
         try:
             number = int(number)
         except ValueError:
-            return HttpResponse(
-                "Invalid number. Number must be an integer.", status=400
-            )
+            errors.append("Invalid number. Number must be an integer.")
 
-        if not 2500 <= number <= 3540:
-            return HttpResponse(
-                "Invalid number. Number must be between 2500 and 3540.", status=400
-            )
+        else:
+            if not 2500 <= number <= 3540:
+                errors.append(
+                    "Invalid number. Number must be between 2500 and 3540.",
+                )
+
+        # If there are any errors, pass the error messages to the template context
+        if errors:
+            context = {"errors": errors}
+            return render(request, "index.html", context)
 
         url = f"https://pais.co.il/lotto/currentlotto.aspx?lotteryId={number}"
 

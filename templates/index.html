@@ -19,6 +19,11 @@
                    value="{{ number }}"
                    placeholder="הקלד מספר הגרלה"/>
           </div>
+          {% if errors %}
+            <div class="error-messages">
+              {% for error in errors %}<p>{{ error }}</p>{% endfor %}
+            </div>
+          {% endif %}
           <button class="block mx-auto shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white py-2 px-10 rounded-lg mt-4 text-base"
                   type="submit">
             שלח

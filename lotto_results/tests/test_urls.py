@@ -1,23 +1,26 @@
 from django.test import TestCase
-from django.urls import resolve, reverse
-
-from lotto_results.views import ShortUrlView, redirect_to_url
+from django.urls import reverse
 
 
-class TestUrl(TestCase):
+class TestURLPatterns(TestCase):
 
-    """Tests for creating and redirecting a short URL.
-    And a test for non-existing short URL"""
+    """
+    Test that the URL for the review lottery results view is mapped to
+    the correct URL. It also checks that a GET request to this view returns
+    a status code of 200 and uses the `index.html` template.
+    """
 
-    def test_create_url_resolves(self):
-        url = reverse("create")
-        self.assertEqual(resolve(url).func.view_class, ShortUrlView)
+    def test_review_lottery_results_view(self):
+        # Set up the test data
+        url = "/"
+        view_name = "review-lottery-results"
 
-    def test_redirect_url_resolves(self):
-        url = reverse("entry_point", args=["some-url"])
-        self.assertEqual(resolve(url).func, redirect_to_url)
+        # Check that the URL maps to the correct view
+        self.assertEqual(reverse(view_name), url)
 
-    def test_redirect_url_404(self):
-        url = reverse("entry_point", args=["some-url"])
+        # Send a GET request to the view
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
+
+        # Check the status code and the content of the response
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "index.html")

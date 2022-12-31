@@ -1,13 +1,17 @@
 from django.apps import apps
 from django.test import TestCase
 
-from lotto_results.apps import UrlShortenerConfig
+from lotto_results.apps import LottoResultsConfig
 
 
-class test_appConfig(TestCase):
+class TestAppConfig(TestCase):
+    """
+    Test whether the app is installed and if it's name matches what we expect.
+    It also checks that the app has been registered with Django.
 
-    """Check if the app is registered and the correct app is returned"""
+    :return: The name of the app and the name of the appconfig class
+    """
 
     def test_app(self):
-        self.assertEqual("shorturls", UrlShortenerConfig.name)
-        self.assertEqual("shorturls", apps.get_app_config("shorturls").name)
+        self.assertEqual("lotto_results", LottoResultsConfig.name)
+        self.assertEqual("lotto_results", apps.get_app_config("lotto_results").name)

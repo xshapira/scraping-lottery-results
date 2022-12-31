@@ -10,7 +10,7 @@ from django.views import View
 def scrape_lotto_results(url: str) -> JsonResponse:
     """
     Accept a URL as an argument and return a JSON response containing
-    the scraped data. We use BeautifulSoup to parse out all of the HTML
+    the scraped data. We use BeautifulSoup to parse out the desired HTML
     content from that page.
 
     It then extracts the result of the lotto numbers, sorts them in

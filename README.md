@@ -18,7 +18,7 @@ To run this project, you will need to follow these steps:
 * Python 3.11
 * Poetry (for dependency management)
 
-Step 1: Create a virtual environment
+## Step 1: Create a virtual environment
 
 To create a virtual environment, open a terminal and navigate to the root directory of the project. Then, run the following command:
 

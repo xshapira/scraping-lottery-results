@@ -6,6 +6,8 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import View
 
+from lotto_results.forms import LotteryResultsForm
+
 
 def scrape_lotto_results(url: str) -> JsonResponse:
     """
@@ -69,33 +71,17 @@ class ReviewLotteryResults(View):
     """
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        return render(request, "index.html")
+        form = LotteryResultsForm()
+        context = {"form": form}
+        return render(request, "index.html", context)
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        number = request.POST.get("number")
-
-        # Set up a list to store error messages
-        errors = []
-
-        if not number:
-            errors.append("נא הקלד מספר הגרלה.")
-
-        else:
-            try:
-                number = int(number)
-            except ValueError:
-                errors.append("ניתן להקליד מספרים בלבד!")
-
-            else:
-                if not 2500 <= number <= 3540:
-                    errors.append(
-                        "מספר לא תקין. המספר חייב להיות בין 2500 ל-3540.",
-                    )
-
-        # If there are any errors, pass the error messages to the template context
-        if errors:
-            context = {"errors": errors}
-            return render(request, "index.html", context)
+        form = LotteryResultsForm(request.POST)
+        if not form.is_valid():
+            # Form is invalid => render the template with the form instance
+            return render(request, "index.html", {"form": form})
+        # Process the data if Form is valid
+        number = form.cleaned_data.get("number")
 
         url = f"https://pais.co.il/lotto/currentlotto.aspx?lotteryId={number}"
 

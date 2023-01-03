@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 
 
 class LotteryResultsForm(forms.Form):
@@ -20,16 +19,20 @@ class LotteryResultsForm(forms.Form):
         }
 
     number = forms.IntegerField(
-        min_value=2500,
-        max_value=3540,
+        error_messages={
+            "invalid": "ניתן להקליד מספרים בלבד!",
+        },
         widget=forms.TextInput(attrs={"placeholder": "הקלד מספר הגרלה"}),
     )
 
     def clean(self) -> None:
-        if number := self.cleaned_data.get("number"):
+        number = self.cleaned_data.get("number")
+
+        # Check if the form data is correctly bound to the form
+        if number is not None:
             try:
                 number = int(number)
-            except ValidationError:
+            except ValueError:
                 self.add_error(
                     "number",
                     "ניתן להקליד מספרים בלבד!",
@@ -39,13 +42,5 @@ class LotteryResultsForm(forms.Form):
                 if not 2500 <= number <= 3540:
                     self.add_error(
                         "number",
-                        forms.ValidationError(
-                            "מספר לא תקין. המספר חייב להיות בין 2500 ל-3540."
-                        ),
+                        "מספר לא תקין. המספר חייב להיות בין 2500 ל-3540.",
                     )
-
-        else:
-            self.add_error(
-                "number",
-                forms.ValidationError("נא הקלד מספר הגרלה."),
-            )

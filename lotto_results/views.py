@@ -80,6 +80,7 @@ class ReviewLotteryResults(View):
         if not form.is_valid():
             # Form is invalid => render the template with the form instance
             return render(request, "index.html", {"form": form})
+
         # Process the data if Form is valid
         number = form.cleaned_data.get("number")
 
@@ -92,5 +93,5 @@ class ReviewLotteryResults(View):
         # and store it in a dictionary
         data = json.loads(lotto_results.content)
 
-        context = {"lotto_results": data, "number": number}
+        context = {"lotto_results": data, "form": form}
         return render(request, "index.html", context)

@@ -215,6 +215,18 @@ django = "*"
 typing-extensions = "*"
 
 [[package]]
+name = "django-widget-tweaks"
+version = "1.4.12"
+description = "Tweak the form field rendering in templates, not in python-level form definitions."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django-widget-tweaks-1.4.12.tar.gz", hash = "sha256:9bfc5c705684754a83cc81da328b39ad1b80f32bd0f4340e2a810cbab4b0c00e"},
+    {file = "django_widget_tweaks-1.4.12-py3-none-any.whl", hash = "sha256:fe6b17d5d595c63331f300917980db2afcf71f240ab9341b954aea8f45d25b9a"},
+]
+
+[[package]]
 name = "djlint"
 version = "1.19.10"
 description = "HTML Template Linter and Formatter"
@@ -783,4 +795,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "67f0f544ed0b09481df579434c5ca5cf469c2e91d63a4bf03746baf54e0d6772"
+content-hash = "a828d6f0fbb4169e372bf5dff686425baba0f14f084dc2df7269a83dd45a76d4"

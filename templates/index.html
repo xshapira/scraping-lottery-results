@@ -1,32 +1,30 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% block content %}
   <form id="results" method="post" hx-post="." hx-target="#results">
     {% csrf_token %}
-    <section class="max-w-3xl mx-auto mb-4 text-center px-4 pt-24 pb-12 md:pt-32 md:pb-20 sm:px-6">
-      <h1 class="text-4xl font-bold mb-8">חיפוש תוצאות לוטו</h1>
-      <div class="flex flex-wrap -mx-3 mb-4">
-        <div class="w-full px-3">
-          <div dir="rtl">
-            <label for="number">מספר ההגרלה:</label>
-            <br/>
-            <input class="border rounded-md w-1/2 py-2 px-3 text-grey-darker"
-                   type="text"
-                   id="number"
-                   name="number"
-                   value="{{ number }}"
-                   placeholder="הקלד מספר הגרלה"/>
-          </div>
-          {% if errors %}
-            <div dir="rtl" class="mt-2 text-sm text-red-600 dark:text-red-500">
-              {% for error in errors %}<p>{{ error }}</p>{% endfor %}
+    {% for field in form %}
+      <section class="max-w-3xl mx-auto mb-4 text-center px-4 pt-24 pb-12 md:pt-32 md:pb-20 sm:px-6">
+        <h1 class="text-4xl font-bold mb-8">חיפוש תוצאות לוטו</h1>
+        <section class="flex flex-wrap -mx-3 mb-4">
+          <div class="w-full px-3">
+            <div dir="rtl">
+              <label for="number">מספר ההגרלה:</label>
+              <br/>
+              {% render_field field class="border rounded-md w-1/2 py-2 px-3 text-grey-darker" value=field.number placeholder=field.field.widget.attrs.placeholder %}
             </div>
-          {% endif %}
-          <button class="block mx-auto shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white py-2 px-10 rounded-lg mt-4 text-base"
-                  type="submit">
-            שלח
-          </button>
-        </div>
-      </div>
+            {% if field.errors %}
+              <div dir="rtl" class="mt-2 text-sm text-red-600 dark:text-red-500">
+                {% for error in field.errors %}<p>{{ error }}</p>{% endfor %}
+              </div>
+            {% endif %}
+            <button class="block mx-auto shadow bg-blue-600 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white py-2 px-10 rounded-lg mt-4 text-base"
+                    type="submit">
+              שלח
+            </button>
+          </div>
+        </section>
+      {% endfor %}
       {% if lotto_results %}
         <hr class="my-8 h-px border-0 bg-gray-400" />
         <ul class="mt-6">

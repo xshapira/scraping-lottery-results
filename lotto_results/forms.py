@@ -30,17 +30,16 @@ class LotteryResultsForm(forms.Form):
 
         # Check if the form data is correctly bound to the form
         if number is not None:
-            try:
-                number = int(number)
-            except ValueError:
+            if not 2500 <= number <= 3540:
                 self.add_error(
                     "number",
-                    "ניתן להקליד מספרים בלבד!",
+                    "מספר לא תקין. המספר חייב להיות בין 2500 ל-3540.",
                 )
-
             else:
-                if not 2500 <= number <= 3540:
+                try:
+                    number = int(number)
+                except ValueError:
                     self.add_error(
                         "number",
-                        "מספר לא תקין. המספר חייב להיות בין 2500 ל-3540.",
+                        "ניתן להקליד מספרים בלבד!",
                     )

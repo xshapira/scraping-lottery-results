@@ -7,7 +7,7 @@ The server receives the numerical input and verifies it according to the specifi
 
 It then makes a REST API call to the Django server, passing the number as an argument. It uses `BeautifulSoup` for web scraping to retrieve information from the lottery results archive website. It searches for the appropriate link on the website and extracts the required numbers from the original HTML page.
 
-The Django server then returns the result in JSON format to the web server, which sends the data to the frontend browser and displays the results in the browser.
+The Django server then returns the result in JSON format to the web server, which sends the data to the frontend and displays the results in the browser.
 
 ## Getting Started
 

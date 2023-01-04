@@ -59,24 +59,19 @@ def scrape_lotto_results(url: str) -> JsonResponse:
 
 class ReviewLotteryResults(View):
     """
-    Checks if the number is between 2500 and 3540, returning an
-    error message if it isn't. If the number is valid, it scrapes data
-    from the pais website using BeautifulSoup4.
+    A view class that handles HTTP GET and POST requests for reviewing
+    lottery results.
 
-    We then checks whether any of the numbers in `lotto_results` are
-    in our list of numbers (numbers). If there's a match,
-    we return the winning numbers.
-
-    :param request: HttpRequest: Get the data from the user
+    When the user submits a valid lottery results form, this class
+    processes the form data, scrapes lottery results from the specified
+    URL, and renders the results template with the scraped data and
+    form instance. If the form is invalid, the template is rendered
+    with the form instance.
     """
 
-    def get(self, request: HttpRequest) -> HttpResponse:
-        form = LotteryResultsForm()
-        context = {"form": form}
-        return render(request, "index.html", context)
-
-    def post(self, request: HttpRequest) -> HttpResponse:
-        form = LotteryResultsForm(request.POST)
+    def process_lotto_results(
+        self, request: HttpRequest, form: LotteryResultsForm
+    ) -> HttpResponse:
         if not form.is_valid():
             # Form is invalid => render the template with the form instance
             return render(request, "index.html", {"form": form})
@@ -95,3 +90,11 @@ class ReviewLotteryResults(View):
 
         context = {"lotto_results": data, "form": form}
         return render(request, "index.html", context)
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        form = LotteryResultsForm()
+        return self.process_lotto_results(request, form)
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        form = LotteryResultsForm(request.POST)
+        return self.process_lotto_results(request, form)

@@ -1,8 +1,10 @@
+from typing import Any
+
 from django import forms
 
 
 class LotteryResultsForm(forms.Form):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
         for field in self.Meta.required:

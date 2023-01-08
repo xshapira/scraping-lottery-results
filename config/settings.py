@@ -1,19 +1,47 @@
+import functools
 from pathlib import Path
 
-from decouple import config
+from pydantic import BaseSettings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+class AppSettings(BaseSettings):
+    DEBUG: bool
+    SECRET_KEY: str
+
+    class Config:
+        case_sensitive = True
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+
+@functools.cache
+def get_app_settings() -> AppSettings:
+    """
+    We're using `cache` decorator to re-use the same AppSettings object,
+    instead of reading it for each request. The AppSettings object will be
+    created only once, the first time it's called. Then it will return
+    the same object that was returned on the first call, again and again.
+    """
+    if AppSettings(DEBUG=True):
+        return AppSettings()
+
+    return AppSettings(_env_file="prod.env", _env_file_encoding="utf-8")
+
+
+config = get_app_settings()
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = config.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", cast=bool)
+DEBUG = config.DEBUG
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "127.0.0.1:8000", "localhost:8000"]
 
